@@ -19,39 +19,25 @@
  * You should have received a copy of the GNU Lesser General Public License     
  * along with this code. If not, see <https://www.gnu.org/licenses/lgpl-3.0.html>.      
  */
-using BH.oM.Twitter;
-using RestSharp;
-using Newtonsoft.Json;
-using System.IO;
-using Newtonsoft.Json.Linq;
-using RestSharp.Authenticators;
+using BH.oM.Base;
 
-namespace BH.Engine.Twitter
+namespace BH.oM.Twitter
 {
-    public static partial class Query
+    public class StandardSearchParameters : BHoMObject
     {
         /***************************************************/
-        /****           Public Methods                  ****/
+        /****            Public Properties              ****/
         /***************************************************/
-        public static Application AuthenticateApplication(Credentials credentials)
-        {
-            return new Application()
-            {
-                BearerToken = Authenticate(credentials)
-            };
-        }
-        private static string Authenticate(Credentials credentials)
-        {
-            System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;
-            var client = new RestClient("https://api.twitter.com/oauth2/token");
-            var request = new RestRequest(Method.POST);
-            request.AddHeader("cache-control", "no-cache");
-            request.AddHeader("content-type", "application/x-www-form-urlencoded");
-            request.AddParameter("grant_type", "client_credentials");
-            client.Authenticator = new HttpBasicAuthenticator(credentials.APIKey, credentials.APISecretKey);
-            IRestResponse response = client.Execute(request);
-            return response.ToResults("access_token");
-        }
+        //https://developer.twitter.com/en/docs/tweets/search/api-reference/get-search-tweets
+        public string Query { get; set; } = "";
+        public string Geocode { get; set; } = "";
+        public string Lang { get; set; } = "";
+        public string Locale { get; set; } = "";
+        public int Count { get; set; } = 2;
+        public string ResultType { get; set; } = "";
+        public string Until { get; set; } = "";
+        public string SinceId { get; set; } = "";
+        public string MaxId { get; set; } = "";
+        public bool IncludeEntities { get; set; } = true;
     }
 }
-

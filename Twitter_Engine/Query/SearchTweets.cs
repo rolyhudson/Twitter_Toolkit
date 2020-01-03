@@ -39,32 +39,58 @@ namespace BH.Engine.Twitter
         /***************************************************/
         /****           Public Methods                  ****/
         /***************************************************/
-        public static TweetResults SearchTweets(Application application,string endpoint,SearchParameters searchParameters)
+        public static TweetResults SearchTweets(Application application,string endpoint, PremiumSearchParameters searchParameters)
         {
             return new TweetResults()
             {
-                Results = serialiser.Convert.FromJson(SearchPremium(application, endpoint, searchParameters)) as CustomObject
+                Results = serialiser.Convert.FromJson(SearchPremium(application,endpoint, searchParameters)) as CustomObject
             };
         }
         /***************************************************/
-        public static TweetResults SearchTweets(Credentials credentials, string query)
+        public static TweetResults SearchTweets(Application application, StandardSearchParameters searchParameters)
         {
             return new TweetResults()
             {
-                Results = serialiser.Convert.FromJson(SearchStandard(credentials, query)) as CustomObject
+                Results = serialiser.Convert.FromJson(SearchStandard(application,searchParameters)) as CustomObject
             };
         }
         /***************************************************/
-        private static string SearchPremium(Application application, string endpoint, SearchParameters searchParameters)
+        private static string SearchPremium(Application application, string endpoint, PremiumSearchParameters searchParameters)
         {
             System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;
-            RestClient client = new RestClient("https://api.twitter.com/1.1/tweets/search/fullarchive/production.json");
+            RestClient client = new RestClient(endpoint);
             RestRequest request = new RestRequest(Method.POST);
             request.RequestFormat = DataFormat.Json;
             request.AddParameter("application/json", searchParameters.ToRequestBody(),ParameterType.RequestBody);
             request.AddParameter("Authorization", "Bearer " + application.BearerToken, ParameterType.HttpHeader);
             IRestResponse response = client.Execute(request);
             return response.ToResults("results");
+        }
+        private static string SearchStandard(Application application, StandardSearchParameters searchParameters)
+        {
+            System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;
+            RestClient client = new RestClient("https://api.twitter.com/1.1/search/tweets.json");
+            RestRequest request = new RestRequest(Method.GET);
+            request.RequestFormat = DataFormat.Json;
+            request.AddParameter("Authorization", "Bearer " + application.BearerToken, ParameterType.HttpHeader);
+            AddQueryParameters(ref request, searchParameters);
+            IRestResponse response = client.Execute(request);
+            return response.ToResults("statuses");
+        }
+        /***************************************************/
+        private static void AddQueryParameters(ref RestRequest request,StandardSearchParameters searchParameters)
+        {
+            request.AddQueryParameter("q", searchParameters.Query);
+            request.AddQueryParameter("count", searchParameters.Count.ToString());
+            
+            if (searchParameters.Geocode != "") request.AddQueryParameter("geocode", searchParameters.Geocode);
+            if (searchParameters.Lang != "") request.AddQueryParameter("lang", searchParameters.Lang);
+            if (searchParameters.Locale != "") request.AddQueryParameter("locale", searchParameters.Locale);
+            if (searchParameters.ResultType != "") request.AddQueryParameter("result_type", searchParameters.ResultType);
+            if (searchParameters.Until != "") request.AddQueryParameter("until", searchParameters.Until);
+            if (searchParameters.SinceId != "") request.AddQueryParameter("since_id", searchParameters.SinceId);
+            if (searchParameters.MaxId != "") request.AddQueryParameter("max_id", searchParameters.MaxId);
+            if (!searchParameters.IncludeEntities) request.AddQueryParameter("include_entities", "false");
         }
         /***************************************************/
         private static string SearchStandard(Credentials credentials,string query)

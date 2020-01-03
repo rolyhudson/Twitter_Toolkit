@@ -23,7 +23,7 @@ using BH.oM.Base;
 
 namespace BH.oM.Twitter
 {
-    public class SearchParameters : BHoMObject
+    public class PremiumSearchParameters : BHoMObject
     {
         /***************************************************/
         /****            Public Properties              ****/
@@ -32,7 +32,7 @@ namespace BH.oM.Twitter
         public string Tag { get; set; } = "";
         public string FromDate { get; set; } = "";
         public string ToDate { get; set; } = "";
-        public int MaxResults { get; set; } = 1;
+        public int MaxResults { get; set; } = 10;
         public string Next { get; set; } = "";
     }
 }

@@ -48,8 +48,9 @@
     <Compile Include="Elements\Application.cs" />
     <Compile Include="Elements\Credentials.cs" />
     <Compile Include="Elements\OAuthParameters.cs" />
+    <Compile Include="Elements\StandardSearchParameters.cs" />
     <Compile Include="Elements\TweetResults.cs" />
-    <Compile Include="Elements\SearchParameters.cs" />
+    <Compile Include="Elements\PremiumSearchParameters.cs" />
     <Compile Include="Elements\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

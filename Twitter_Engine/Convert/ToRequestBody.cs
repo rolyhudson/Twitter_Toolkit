@@ -30,7 +30,7 @@ namespace BH.Engine.Twitter
         /***************************************************/
         /****           Public Methods                  ****/
         /***************************************************/
-        public static string ToRequestBody(this SearchParameters searchParameters)
+        public static string ToRequestBody(this PremiumSearchParameters searchParameters)
         {
             string body = "{";
             if (searchParameters.FromDate != "") body += "\"fromDate\":\"" + searchParameters.FromDate + "\",";
