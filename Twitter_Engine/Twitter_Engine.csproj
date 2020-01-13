@@ -58,7 +58,6 @@
     <Compile Include="Convert\ToRequestBody.cs" />
     <Compile Include="Convert\ToResults.cs" />
     <Compile Include="Create\OAuthParameters.cs" />
-    <Compile Include="Create\SearchParameters.cs" />
     <Compile Include="Create\User.cs" />
     <Compile Include="Modify\AddOAuthSignature.cs" />
     <Compile Include="Program.cs" />
